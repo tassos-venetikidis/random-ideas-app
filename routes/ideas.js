@@ -17,5 +17,13 @@ router.post("/", (req, res) => {
     date: new Date().toISOString().slice(0, 10),
   };
 });
+// Update Idea
+router.put("/:id", (req, res) => {
+  const id = req.params.id;
+});
+// Delete Idea
+router.delete("/:id", (req, res) => {
+  const id = req.params.id;
+});
 
 module.exports = router;
