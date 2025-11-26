@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 require("dotenv").config();
 const connectDB = require("./config/db.js");
 const ideasRouter = require("./routes/ideas.js");
@@ -8,6 +9,7 @@ connectDB();
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, "public")));
 // Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
