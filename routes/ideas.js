@@ -45,10 +45,10 @@ router.post("/", async (req, res) => {
 // Update Idea
 router.put("/:id", async (req, res) => {
   const id = req.params.id;
-  const { text, tag } = req.body;
+  const { text, tag, username } = req.body;
   try {
     const idea = await Idea.findById(id);
-    if (idea.username === req.body.username) {
+    if (idea.username === username) {
       const updatedIdea = await Idea.findByIdAndUpdate(
         id,
         {

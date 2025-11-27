@@ -1,4 +1,5 @@
 import IdeasApi from "../services/IdeasApi.js";
+import Modal from "./Modal.js";
 
 class IdeaList {
   constructor() {
@@ -15,7 +16,15 @@ class IdeaList {
   }
 
   addEventListeners() {
-    this._ideaList.addEventListener("click", this.deleteIdea.bind(this));
+    this._ideaList.addEventListener("click", (e) => {
+      e.stopImmediatePropagation();
+      const ideaCard = e.target.closest("div");
+      if (e.target.classList.contains("fa-times")) {
+        this.deleteIdea(ideaCard);
+      } else if (e.target.classList.contains("edit")) {
+        this.updateIdea(ideaCard);
+      }
+    });
   }
 
   async getIdeas() {
@@ -41,16 +50,27 @@ class IdeaList {
     return "";
   }
 
-  async deleteIdea(e) {
-    if (e.target.tagName === "BUTTON" || e.target.tagName === "I") {
-      e.stopImmediatePropagation();
-      const ideaCard = e.target.closest("div");
-      try {
-        const res = await IdeasApi.deleteIdea(ideaCard.dataset.id);
-        this.getIdeas();
-      } catch (e) {
-        alert("You cannot delete this resource");
-      }
+  async deleteIdea(ideaCard) {
+    try {
+      const res = await IdeasApi.deleteIdea(ideaCard.dataset.id);
+      this.getIdeas();
+    } catch (e) {
+      alert("You cannot delete this resource");
+    }
+  }
+
+  async updateIdea(ideaCard) {
+    try {
+      const result = await IdeasApi.getIdea(ideaCard.dataset.id);
+      const idea = result.data.data;
+      new Modal().open();
+      const form = document.getElementById("idea-form");
+      form.elements.username.disabled = true;
+      form.elements.text.value = idea.text;
+      form.elements.tag.value = idea.tag;
+      form.setAttribute("data-editid", idea._id);
+    } catch (e) {
+      console.log(e, "Something went wrong!");
     }
   }
 
@@ -73,6 +93,11 @@ class IdeaList {
             Posted on <span class="date">${idea.date}</span> by
             <span class="author">${idea.username}</span>
           </p>
+          ${
+            idea.username === localStorage.getItem("username")
+              ? "<button class='btn edit'>Edit</button>"
+              : ""
+          }
         </div>
       `;
       })

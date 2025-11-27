@@ -13,7 +13,7 @@ class IdeaForm {
 
   render() {
     this._formModal.innerHTML = `
-    <form id="idea-form">
+    <form id="idea-form" data-editid="">
           <div class="form-control">
             <label for="idea-text">Enter a Username</label>
             <input type="text" name="username" id="username" value="${
@@ -57,7 +57,14 @@ class IdeaForm {
       username: this._form.elements.username.value,
     };
 
-    const newIdea = await IdeasApi.createIdea(idea);
+    if (this._form.dataset.editid) {
+      await IdeasApi.updateIdea(this._form.dataset.editid, idea);
+      this._form.dataset.editid = "";
+      this._ideaList.getIdeas();
+    } else {
+      const newIdea = await IdeasApi.createIdea(idea);
+      this._ideaList.addIdeaToList(newIdea.data.data);
+    }
 
     this._form.elements.tag.value = "";
     this._form.elements.text.value = "";
@@ -66,7 +73,6 @@ class IdeaForm {
     this.render();
 
     document.dispatchEvent(new Event("closemodal"));
-    this._ideaList.addIdeaToList(newIdea.data.data);
   }
 }
 

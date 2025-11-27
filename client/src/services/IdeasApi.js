@@ -9,11 +9,17 @@ class IdeasApi {
     return axios.get(this._apiUrl);
   }
 
+  getIdea(id) {
+    return axios.get(`${this._apiUrl}/${id}`);
+  }
+
   createIdea(ideaObj) {
     return axios.post(this._apiUrl, ideaObj);
   }
 
-  updateIdea() {}
+  updateIdea(id, idea) {
+    return axios.put(`${this._apiUrl}/${id}`, idea);
+  }
 
   deleteIdea(id) {
     const username = localStorage.getItem("username")
