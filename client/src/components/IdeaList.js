@@ -24,6 +24,11 @@ class IdeaList {
     }
   }
 
+  addIdeaToList(idea) {
+    this._ideasFromDB.push(idea);
+    this.render();
+  }
+
   getTagClass(tag) {
     tag = tag.toLowerCase();
     if (this._validTags.has(tag)) {
@@ -41,7 +46,9 @@ class IdeaList {
           <h3>
             ${idea.text}
           </h3>
-          <p class="tag ${this.getTagClass(idea.tag)}">${idea.tag}</p>
+          <p class="tag ${this.getTagClass(
+            idea.tag
+          )}">${idea.tag.toUpperCase()}</p>
           <p>
             Posted on <span class="date">${idea.date}</span> by
             <span class="author">${idea.username}</span>
