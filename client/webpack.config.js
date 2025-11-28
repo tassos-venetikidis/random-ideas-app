@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default {
-  mode: "development",
+  mode: "production",
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "../public"),
@@ -23,6 +23,9 @@ export default {
     hot: true,
     compress: true,
     historyApiFallback: true,
+    proxy: {
+      "/api": "http://localhost:5000",
+    },
   },
   module: {
     rules: [
