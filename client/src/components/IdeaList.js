@@ -90,7 +90,7 @@ class IdeaList {
             idea.tag
           )}">${idea.tag.toUpperCase()}</p>
           <p>
-            Posted on <span class="date">${idea.date}</span> by
+            Posted on <span class="date">${idea.date.slice(0, 10)}</span> by
             <span class="author">${idea.username}</span>
           </p>
           ${
